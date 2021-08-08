@@ -1,4 +1,4 @@
-variable "bucket" {
+variable "name" {
   type        = string
   description = "The name of the s3 bucket"
 }
@@ -10,7 +10,9 @@ variable "use_prefix" {
 }
 
 variable "labels" {
-  type        = string
+  type = object({
+    id = string
+  })
   description = "The labels module id"
   default     = null
 }
@@ -30,7 +32,7 @@ variable "acl" {
 variable "versioning" {
   description = "Use bucket versioning"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "logging" {
