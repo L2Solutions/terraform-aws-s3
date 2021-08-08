@@ -1,5 +1,5 @@
 locals {
-  bucket        = var.bucket
+  bucket        = var.name
   use_prefix    = var.use_prefix
   labels        = var.labels
   sse_algorithm = var.sse_algorithm
