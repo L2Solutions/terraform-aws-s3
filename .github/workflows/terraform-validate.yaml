@@ -1,0 +1,31 @@
+name: Terraform Validate
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  cli-validations:
+    runs-on: ubuntu-latest
+    name: Terraform cli validations
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.L2_INTERNAL_TESTING_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.L2_INTERNAL_TESTING_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: "us-east-2"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform format
+        run: terraform fmt -check --recursive
+
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@v12.641.0
+        with:
+          skip_check: CKV_AWS_52,CKV_AWS_145,CKV_AWS_144,CKV2_AWS_6
+
+
