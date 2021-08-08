@@ -26,6 +26,6 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@v12.641.0
         with:
-          skip_check: CKV_AWS_52, CKV_AWS_145, CKV_AWS_144
+          skip_check: CKV_AWS_52,CKV_AWS_145,CKV_AWS_144
 
 
