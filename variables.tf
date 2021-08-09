@@ -36,13 +36,16 @@ variable "versioning" {
 }
 
 variable "logging" {
-  description = "Logging bucket id and folder prefix"
-  type = object({
-    bucket = string
-    prefix = string
-  })
-  default = null
+  description = "Pass false to disable logging or pass the logging bucket id"
+  type        = any
 }
+
+variable "logging_prefix" {
+  description = "Will default to /{name}"
+  type        = string
+  default     = null
+}
+
 
 variable "cors_rule" {
   description = "value"
