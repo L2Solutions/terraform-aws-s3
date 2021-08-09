@@ -13,6 +13,6 @@ locals {
 
   logging = tobool(var.logging) == false ? [] : [{
     bucket = tostring(var.logging)
-    prefix = prefix
+    prefix = local.prefix
   }]
 }
