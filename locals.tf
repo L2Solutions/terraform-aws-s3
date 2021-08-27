@@ -12,8 +12,8 @@ locals {
   bucket_name   = (var.name_override || local.labels == null) ? local.bucket : "${local.labels.id}-${local.bucket}" 
   supress_iam   = var.supress_iam
 
-  logging = try(tobool(var.logging), false) == false ? [] : [{
-    bucket = tostring(var.logging)
+  logging = var.logging == null ? [] : [{
+    bucket = var.logging
     prefix = local.prefix
   }]
 }

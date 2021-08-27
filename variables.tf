@@ -42,8 +42,8 @@ variable "versioning" {
 }
 
 variable "logging" {
-  description = "Pass false to disable logging or pass the logging bucket id"
-  type        = any
+  description = "Pass null to disable logging or pass the logging bucket id"
+  type        = string
 }
 
 variable "logging_prefix" {
