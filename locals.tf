@@ -10,7 +10,7 @@ locals {
   roles         = var.roles
   groups        = var.groups
   bucket_name   = (var.name_override || local.labels == null) ? local.bucket : "${local.labels.id}-${local.bucket}" 
-  supress_iam   = var.supress_iam
+  suppress_iam   = var.suppress_iam
 
   logging = var.logging == null ? [] : [{
     bucket = var.logging
