@@ -9,7 +9,7 @@ locals {
   cors_rule     = var.cors_rule != null ? [var.cors_rule] : []
   roles         = var.roles
   groups        = var.groups
-  bucket_name   = local.labels != null ? "${local.labels.id}-${local.bucket}" : local.bucket
+  bucket_name   = var.name_override != null ? var.name_override : (local.labels != null ? "${local.labels.id}-${local.bucket}" : local.bucket)
   supress_iam   = var.supress_iam
 
   logging = try(tobool(var.logging), false) == false ? [] : [{
