@@ -38,6 +38,7 @@ resource "aws_s3_bucket" "this" {
 }
 
 data "aws_iam_policy_document" "this_ro" {
+  count = local.supress_iam ? 0 : 1
   statement {
     sid = "S3ListBucket"
     actions = [
@@ -53,6 +54,8 @@ data "aws_iam_policy_document" "this_ro" {
 }
 
 data "aws_iam_policy_document" "this_rw" {
+  count = local.supress_iam ? 0 : 1
+
   statement {
     sid = "S3ListBucket"
     actions = [
@@ -67,25 +70,30 @@ data "aws_iam_policy_document" "this_rw" {
 }
 
 resource "aws_iam_policy" "this_rw" {
+  count = local.supress_iam ? 0 : 1
+
   name_prefix = "${local.bucket}-rw"
-  policy      = data.aws_iam_policy_document.this_rw.json
+  policy      = data.aws_iam_policy_document.this_rw[0].json
 }
 
 resource "aws_iam_policy" "this_ro" {
+  count = local.supress_iam ? 0 : 1
+
+
   name_prefix = "${local.bucket}-ro"
-  policy      = data.aws_iam_policy_document.this_ro.json
+  policy      = data.aws_iam_policy_document.this_ro[0].json
 }
 
 resource "aws_iam_group_policy_attachment" "this" {
-  count = length(local.groups)
+  count = local.supress_iam ? 0 : length(local.groups)
 
   group      = local.groups[count.index].name
-  policy_arn = local.groups[count.index].mode == "RW" ? aws_iam_policy.this_rw.arn : aws_iam_policy.this_ro.arn
+  policy_arn = local.groups[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0]..arn
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  count = length(local.roles)
+  count = local.supress_iam ? 0 : length(local.roles)
 
   role       = local.roles[count.index].name
-  policy_arn = local.roles[count.index].mode == "RW" ? aws_iam_policy.this_rw.arn : aws_iam_policy.this_ro.arn
+  policy_arn = local.roles[count.index].mode == "RW" ? aws_iam_policy.this_rw[0]..arn : aws_iam_policy.this_ro[0]..arn
 }
