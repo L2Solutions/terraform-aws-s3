@@ -9,6 +9,12 @@ variable "use_prefix" {
   default     = true
 }
 
+variable "name_override" {
+  type        = string
+  description = "Name override the opionated name variable"
+  default     = null
+}
+
 variable "labels" {
   type = object({
     id = string
