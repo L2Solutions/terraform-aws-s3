@@ -5,7 +5,7 @@ variable "name" {
 
 variable "use_prefix" {
   type        = bool
-  description = "Use var.bucket as name prefix instead"
+  description = "Use var.name as name prefix instead"
   default     = true
 }
 
@@ -78,4 +78,10 @@ variable "roles" {
     error_message = "Mode must be RW or RO."
   }
   default = []
+}
+
+variable "supress_iam" {
+  description = "Supresses the module creating iam resources if none are needed"
+  type        = bool
+  default     = false
 }

@@ -9,9 +9,10 @@ locals {
   cors_rule     = var.cors_rule != null ? [var.cors_rule] : []
   roles         = var.roles
   groups        = var.groups
-  bucket_name   = local.labels != null ? "${local.labels}-${local.bucket}" : local.bucket
+  bucket_name   = local.labels != null ? "${local.labels.id}-${local.bucket}" : local.bucket
+  supress_iam   = var.supress_iam
 
-  logging = tobool(var.logging) == false ? [] : [{
+  logging = try(tobool(var.logging), false) == false ? [] : [{
     bucket = tostring(var.logging)
     prefix = local.prefix
   }]
