@@ -31,8 +31,8 @@ resource "aws_s3_bucket" "this" {
     for_each = local.logging
 
     content {
-      target_bucket = logging.bucket
-      target_prefix = logging.prefix
+      target_bucket = logging.value["bucket"]
+      target_prefix = logging.value["prefix"]
     }
   }
 }
