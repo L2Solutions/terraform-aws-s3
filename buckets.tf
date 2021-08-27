@@ -88,12 +88,12 @@ resource "aws_iam_group_policy_attachment" "this" {
   count = local.supress_iam ? 0 : length(local.groups)
 
   group      = local.groups[count.index].name
-  policy_arn = local.groups[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0]..arn
+  policy_arn = local.groups[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
   count = local.supress_iam ? 0 : length(local.roles)
 
   role       = local.roles[count.index].name
-  policy_arn = local.roles[count.index].mode == "RW" ? aws_iam_policy.this_rw[0]..arn : aws_iam_policy.this_ro[0]..arn
+  policy_arn = local.roles[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
 }
