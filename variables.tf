@@ -10,9 +10,9 @@ variable "use_prefix" {
 }
 
 variable "name_override" {
-  type        = string
+  type        = bool
   description = "Name override the opionated name variable"
-  default     = null
+  default     = false
 }
 
 variable "labels" {
