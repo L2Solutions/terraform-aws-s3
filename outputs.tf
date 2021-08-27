@@ -4,11 +4,11 @@ output "s3_arn" {
 }
 
 output "rw_arn" {
-  value       = aws_iam_policy.this_ro.arn
+  value       = local.supress_iam ? null : aws_iam_policy.this_rw[0].arn
   description = "Read/Write S3 policy ARN"
 }
 
 output "ro_arn" {
-  value       = aws_iam_policy.this_ro
+  value       = local.supress_iam ? null : aws_iam_policy.this_ro[0].arn
   description = "Read Only S3 policy ARN"
 }
