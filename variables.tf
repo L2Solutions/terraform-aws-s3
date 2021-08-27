@@ -11,7 +11,7 @@ variable "use_prefix" {
 
 variable "name_override" {
   type        = bool
-  description = "Name override the opionated name variable"
+  description = "Name override the opinionated name variable"
   default     = false
 }
 
