@@ -86,7 +86,7 @@ variable "roles" {
   default = []
 }
 
-variable "supress_iam" {
+variable "suppress_iam" {
   description = "Supresses the module creating iam resources if none are needed"
   type        = bool
   default     = false
