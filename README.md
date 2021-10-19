@@ -1,10 +1,8 @@
-# This module is now located at <https://registry.terraform.io/modules/OmniTeqSource/s3/aws/latest>
-
 # terraform-aws-s3
 
 Utility module for creating a S3 bucket with ReadOnly and ReadWrite permissions as well as role and group attachments.
 
-- [Registry](https://registry.terraform.io/modules/L2Solutions/s3/aws/latest)
+- [Registry](https://registry.terraform.io/modules/OmniTeqSource/s3/aws/latest)
 
 ## terraform-docs usage
 
