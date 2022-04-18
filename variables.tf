@@ -55,8 +55,13 @@ variable "logging_prefix" {
 
 variable "cors_rule" {
   description = "value"
-  type        = map(any)
-  default     = null
+  type = map(object({
+    allowed_headers = optional(list(string))
+    allowed_methods = optional(list(string))
+    allowed_origins = optional(list(string))
+    expose_headers  = optional(list(string))
+  }))
+  default = {}
 }
 
 variable "groups" {
