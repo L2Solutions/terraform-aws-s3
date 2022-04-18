@@ -24,7 +24,7 @@ variable "labels" {
 }
 
 variable "sse_algorithm" {
-  default     = "AES256"
+  default     = "aws:kms"
   description = "The encryption algorithm"
   type        = string
 }
