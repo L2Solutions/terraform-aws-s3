@@ -17,6 +17,8 @@ resource "aws_iam_role" "example" {
 
 
 module "example" {
+  // checkov:skip=CKV_AWS_18: Ignore logging in example
+
   source = "../.."
 
   name          = "example"
