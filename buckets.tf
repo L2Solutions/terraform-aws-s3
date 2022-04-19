@@ -2,39 +2,56 @@
 resource "aws_s3_bucket" "this" {
   bucket        = local.use_prefix ? null : local.bucket_name
   bucket_prefix = local.use_prefix ? local.bucket_name : null
-  acl           = local.acl
+}
 
-  versioning {
-    enabled = local.versioning
+resource "aws_s3_bucket_cors_configuration" "this" {
+  for_each = local.cors_rule
+  bucket   = aws_s3_bucket.this.id
+
+  cors_rule {
+    allowed_headers = lookup(each.value, "allowed_headers", [])
+    allowed_methods = lookup(each.value, "allowed_methods", [])
+    allowed_origins = lookup(each.value, "allowed_origins", [])
+    expose_headers  = lookup(each.value, "expose_headers", [])
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = local.sse_algorithm
-      }
+resource "aws_s3_bucket_logging" "this" {
+  for_each = local.logging
+  bucket   = aws_s3_bucket.this.id
+
+  target_bucket = each.value["bucket"]
+  target_prefix = each.value["prefix"]
+}
+
+resource "aws_s3_bucket_acl" "this" {
+  bucket = aws_s3_bucket.this.id
+  acl    = local.acl
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = local.sse_algorithm
     }
   }
+}
 
-  dynamic "cors_rule" {
-    for_each = local.cors_rule
-
-    content {
-      allowed_headers = lookup(cors_rule.value, "allowed_headers", [])
-      allowed_methods = lookup(cors_rule.value, "allowed_methods", [])
-      allowed_origins = lookup(cors_rule.value, "allowed_origins", [])
-      expose_headers  = lookup(cors_rule.value, "expose_headers", [])
-    }
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
+  versioning_configuration {
+    status = local.versioning ? "Enabled" : "Disabled"
   }
+}
 
-  dynamic "logging" {
-    for_each = local.logging
-
-    content {
-      target_bucket = logging.value["bucket"]
-      target_prefix = logging.value["prefix"]
-    }
-  }
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.this.id
+  block_public_policy     = local.public_access_block["block_public_policy"]
+  block_public_acls       = local.public_access_block["block_public_acls"]
+  restrict_public_buckets = local.public_access_block["restrict_public_buckets"]
+  ignore_public_acls      = local.public_access_block["ignore_public_acls"]
 }
 
 data "aws_iam_policy_document" "this_ro" {

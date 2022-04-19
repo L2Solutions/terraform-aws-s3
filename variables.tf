@@ -24,7 +24,7 @@ variable "labels" {
 }
 
 variable "sse_algorithm" {
-  default     = "AES256"
+  default     = "aws:kms"
   description = "The encryption algorithm"
   type        = string
 }
@@ -44,6 +44,7 @@ variable "versioning" {
 variable "logging" {
   description = "Pass null to disable logging or pass the logging bucket id"
   type        = string
+  default     = null
 }
 
 variable "logging_prefix" {
@@ -52,11 +53,15 @@ variable "logging_prefix" {
   default     = null
 }
 
-
 variable "cors_rule" {
   description = "value"
-  type        = map(any)
-  default     = null
+  type = map(object({
+    allowed_headers = optional(list(string))
+    allowed_methods = optional(list(string))
+    allowed_origins = optional(list(string))
+    expose_headers  = optional(list(string))
+  }))
+  default = {}
 }
 
 variable "groups" {
@@ -90,4 +95,13 @@ variable "suppress_iam" {
   description = "Supresses the module creating iam resources if none are needed"
   type        = bool
   default     = false
+}
+
+variable "public_access_block" {
+  type = object({
+    block_public_policy     = optional(bool)
+    block_public_acls       = optional(bool)
+    restrict_public_buckets = optional(bool)
+    ignore_public_acls      = optional(bool)
+  })
 }

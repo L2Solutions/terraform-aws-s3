@@ -22,10 +22,8 @@ jobs:
       - name: Terraform format
         run: terraform fmt -check --recursive
 
-      - name: Run Checkov action
-        id: checkov
-        uses: bridgecrewio/checkov-action@v12.641.0
-        with:
-          skip_check: CKV_AWS_52,CKV_AWS_145,CKV_AWS_144,CKV2_AWS_6
-
-
+      - name: Terraform Validate Examples
+        working-directory: examples/complete
+        run: |
+          terraform init -backend=false
+          terraform validate ./
