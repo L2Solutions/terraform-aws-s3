@@ -46,6 +46,14 @@ resource "aws_s3_bucket_versioning" "this" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.this.id
+  block_public_policy     = local.public_access_block["block_public_policy"]
+  block_public_acls       = local.public_access_block["block_public_acls"]
+  restrict_public_buckets = local.public_access_block["restrict_public_buckets"]
+  ignore_public_acls      = local.public_access_block["ignore_public_acls"]
+}
+
 data "aws_iam_policy_document" "this_ro" {
   count = local.suppress_iam ? 0 : 1
   statement {
