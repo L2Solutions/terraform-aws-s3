@@ -18,6 +18,7 @@ resource "aws_iam_role" "example" {
 
 module "example" {
   // checkov:skip=CKV_AWS_18: Ignore logging in example
+  // checkov:slip=CKV_AWS_144: Ignore cross-region in example
 
   source = "../.."
 
@@ -37,5 +38,12 @@ module "example" {
       allowed_origins = ["*"]
       expose_headers  = []
     }
+  }
+
+  public_access_block = {
+    block_public_policy     = true
+    block_public_acls       = true
+    restrict_public_buckets = true
+    ignore_public_acls      = true
   }
 }

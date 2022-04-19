@@ -53,7 +53,6 @@ variable "logging_prefix" {
   default     = null
 }
 
-
 variable "cors_rule" {
   description = "value"
   type = map(object({
@@ -96,4 +95,13 @@ variable "suppress_iam" {
   description = "Supresses the module creating iam resources if none are needed"
   type        = bool
   default     = false
+}
+
+variable "public_access_block" {
+  type = object({
+    block_public_policy     = optional(bool)
+    block_public_acls       = optional(bool)
+    restrict_public_buckets = optional(bool)
+    ignore_public_acls      = optional(bool)
+  })
 }
