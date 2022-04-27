@@ -47,3 +47,16 @@ module "example" {
     ignore_public_acls      = true
   }
 }
+
+module "simple" {
+  // checkov:skip=CKV_AWS_18: Ignore logging in example
+  // checkov:slip=CKV_AWS_144: Ignore cross-region in example
+
+  source = "../.."
+
+  name          = "example2"
+  name_override = true
+  use_prefix    = false
+
+
+}
