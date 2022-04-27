@@ -104,4 +104,5 @@ variable "public_access_block" {
     restrict_public_buckets = optional(bool)
     ignore_public_acls      = optional(bool)
   })
+  default = {}
 }
