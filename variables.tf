@@ -16,12 +16,19 @@ variable "name_override" {
 }
 
 variable "labels" {
-  type = object({
-    id = string
-  })
-  description = "The labels module id"
-  default     = null
+  description = "Instance of labels module"
+  type = object(
+    {
+      id   = string
+      tags = any
+    }
+  )
+  default = {
+    id   = ""
+    tags = {}
+  }
 }
+
 
 variable "sse_algorithm" {
   default     = "aws:kms"
