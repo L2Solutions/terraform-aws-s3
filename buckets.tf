@@ -2,6 +2,8 @@
 resource "aws_s3_bucket" "this" {
   bucket        = local.use_prefix ? null : local.bucket_name
   bucket_prefix = local.use_prefix ? local.bucket_name : null
+
+  tags = local.labels.tags
 }
 
 resource "aws_s3_bucket_cors_configuration" "this" {
