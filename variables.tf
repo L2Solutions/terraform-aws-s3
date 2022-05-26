@@ -113,3 +113,20 @@ variable "public_access_block" {
   })
   default = {}
 }
+
+variable "policy_conditions" {
+  description = "Conditions on RO and RW policy"
+  default     = {}
+  type = object({
+    RW = optional(map(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+    RO = optional(map(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+  })
+}

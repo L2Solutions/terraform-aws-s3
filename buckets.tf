@@ -69,7 +69,18 @@ data "aws_iam_policy_document" "this_ro" {
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*"
     ]
+    dynamic "condition" {
+      for_each = local.RO_policy_conditions
+
+      content {
+        test     = condition.value.test
+        variable = condition.value.variable
+        values   = condition.value.values
+      }
+    }
   }
+
+
 }
 
 data "aws_iam_policy_document" "this_rw" {
@@ -85,7 +96,18 @@ data "aws_iam_policy_document" "this_rw" {
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*"
     ]
+    dynamic "condition" {
+      for_each = local.RW_policy_conditions
+
+      content {
+        test     = condition.value.test
+        variable = condition.value.variable
+        values   = condition.value.values
+      }
+    }
   }
+
+
 }
 
 resource "aws_iam_policy" "this_rw" {

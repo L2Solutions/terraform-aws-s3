@@ -57,6 +57,53 @@ module "simple" {
   name          = "example2"
   name_override = true
   use_prefix    = false
+}
 
+module "policy_extend_ro" {
+  // checkov:skip=CKV_AWS_18: Ignore logging in example
+  // checkov:slip=CKV_AWS_144: Ignore cross-region in example
 
+  source = "../.."
+
+  name          = "example2"
+  name_override = true
+  use_prefix    = false
+
+  policy_conditions = {
+    RO = {
+      "key" = {
+        test     = "StringLike"
+        values   = ["home/"]
+        variable = "s3:prefix"
+      }
+    }
+  }
+}
+
+module "policy_extend_both" {
+  // checkov:skip=CKV_AWS_18: Ignore logging in example
+  // checkov:slip=CKV_AWS_144: Ignore cross-region in example
+
+  source = "../.."
+
+  name          = "example2"
+  name_override = true
+  use_prefix    = false
+
+  policy_conditions = {
+    RO = {
+      "key" = {
+        test     = "StringLike"
+        values   = ["home/"]
+        variable = "s3:prefix"
+      }
+    }
+    RW = {
+      "key" = {
+        test     = "StringLike"
+        values   = ["home/"]
+        variable = "s3:prefix"
+      }
+    }
+  }
 }
