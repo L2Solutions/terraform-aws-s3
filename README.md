@@ -1,4 +1,8 @@
-# terraform-aws-s3
+# Terraform AWS S3 Module
+
+## This Module Has Moved To:
+
+<https://registry.terraform.io/modules/etesiai/s3/aws/latest>
 
 Utility module for creating a S3 bucket with ReadOnly and ReadWrite permissions as well as role and group attachments.
 
