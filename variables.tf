@@ -130,3 +130,9 @@ variable "policy_conditions" {
     })))
   })
 }
+
+variable "force_destroy" {
+  type        = bool
+  description = "Force destroy passed to bucket"
+  default     = false
+}
