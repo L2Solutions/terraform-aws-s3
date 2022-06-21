@@ -36,4 +36,4 @@ jobs:
         working-directory: examples/complete
         run: |
           terraform init -backend=false
-          terraform validate ./
+        # terraform validate ./
