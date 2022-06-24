@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Terraform cli validations
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.L2_INTERNAL_TESTING_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.L2_INTERNAL_TESTING_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: "us-east-2"
     steps:
       - name: Checkout
@@ -32,8 +32,20 @@ jobs:
       - name: Terraform format
         run: terraform fmt -check --recursive
 
-      - name: Terraform Validate Examples
-        working-directory: examples/complete
+      - name: Terraform Validate Examples/simple
+        working-directory: examples/simple
         run: |
           terraform init -backend=false
           terraform validate ./
+      - name: Terraform Validate Examples/s3policy
+        working-directory: examples/s3policy
+        run: |
+          terraform init -backend=false
+          terraform validate ./
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ">=1.17.0"
+      - name: Terratest
+        working-directory: test
+        run: go test

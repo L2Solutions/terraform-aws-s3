@@ -2,6 +2,7 @@
 resource "aws_s3_bucket" "this" {
   bucket        = local.use_prefix ? null : local.bucket_name
   bucket_prefix = local.use_prefix ? local.bucket_name : null
+  force_destroy = local.force_destroy
 
   tags = local.labels.tags
 }
@@ -106,8 +107,6 @@ data "aws_iam_policy_document" "this_rw" {
       }
     }
   }
-
-
 }
 
 resource "aws_iam_policy" "this_rw" {
@@ -119,7 +118,6 @@ resource "aws_iam_policy" "this_rw" {
 
 resource "aws_iam_policy" "this_ro" {
   count = local.suppress_iam ? 0 : 1
-
 
   name_prefix = "${local.bucket}-ro"
   policy      = data.aws_iam_policy_document.this_ro[0].json
