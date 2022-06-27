@@ -130,3 +130,9 @@ variable "policy_conditions" {
     })))
   })
 }
+
+variable "force_destroy" {
+  type        = bool
+  default     = false
+  description = "Force destroy variable passed through to s3 resource"
+}
