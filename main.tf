@@ -1,3 +1,17 @@
+module "labels" {
+  source  = "skyfjell/label/null//modules/extend"
+  version = "1.0.1"
+
+  config = merge(
+    local.labels,
+    {
+      name      = length(local.labels.name) == 0 ? local.name : local.labels.name
+      component = length(local.labels.name) == 0 ? "" : local.name
+    }
+  )
+
+  config_unique_id = local.config_unique_id
+}
 
 resource "aws_s3_bucket" "this" {
   // checkov:skip=CKV_AWS_144: Not yet supported
@@ -6,11 +20,11 @@ resource "aws_s3_bucket" "this" {
   // checkov:skip=CKV_AWS_18: User defined input
   // checkov:skip=CKV_AWS_145: User defined input
   // checkov:skip=CKV_AWS_19: User defined input
-  bucket        = local.use_prefix ? null : local.bucket_name
-  bucket_prefix = local.use_prefix ? local.bucket_name : null
+  bucket        = local.use_prefix ? null : module.labels.id
+  bucket_prefix = local.use_prefix ? module.labels.id : null
   force_destroy = local.force_destroy
 
-  tags = local.labels.tags
+  tags = module.labels.tags
 }
 
 resource "aws_s3_bucket_cors_configuration" "this" {
@@ -90,8 +104,6 @@ data "aws_iam_policy_document" "this_ro" {
       }
     }
   }
-
-
 }
 
 data "aws_iam_policy_document" "this_rw" {
@@ -122,15 +134,15 @@ data "aws_iam_policy_document" "this_rw" {
 resource "aws_iam_policy" "this_rw" {
   count = local.suppress_iam ? 0 : 1
 
-  name_prefix = "${local.bucket}-rw"
-  policy      = data.aws_iam_policy_document.this_rw[0].json
+  name   = "${aws_s3_bucket.this.id}-rw"
+  policy = data.aws_iam_policy_document.this_rw[0].json
 }
 
 resource "aws_iam_policy" "this_ro" {
   count = local.suppress_iam ? 0 : 1
 
-  name_prefix = "${local.bucket}-ro"
-  policy      = data.aws_iam_policy_document.this_ro[0].json
+  name   = "${aws_s3_bucket.this.id}-ro"
+  policy = data.aws_iam_policy_document.this_ro[0].json
 }
 
 resource "aws_iam_group_policy_attachment" "this" {

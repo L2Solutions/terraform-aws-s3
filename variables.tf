@@ -6,7 +6,7 @@ variable "name" {
 variable "use_prefix" {
   type        = bool
   description = "Use var.name as name prefix instead"
-  default     = true
+  default     = false
 }
 
 variable "name_override" {
@@ -17,12 +17,8 @@ variable "name_override" {
 
 variable "labels" {
   description = "Instance of labels module"
-  type = object(
-    {
-      id   = string
-      tags = any
-    }
-  )
+  type        = any
+
   default = {
     id   = ""
     tags = {}
@@ -135,4 +131,15 @@ variable "force_destroy" {
   type        = bool
   default     = false
   description = "Force destroy variable passed through to s3 resource"
+}
+
+variable "config_unique_id" {
+  description = "Configure Unique Identifier"
+  default     = {}
+
+  type = object({
+    enable        = optional(bool)
+    length        = optional(number)
+    enable_suffix = optional(bool)
+  })
 }

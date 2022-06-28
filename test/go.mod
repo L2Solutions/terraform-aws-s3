@@ -1,4 +1,4 @@
-module github.com/skyfjall/terraform-aws-s3
+module github.com/skyfjell/terraform-aws-s3
 
 go 1.18
 

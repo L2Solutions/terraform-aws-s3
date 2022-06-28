@@ -1,5 +1,10 @@
+provider "aws" {
+  region = "us-east-2"
+}
+
 module "labels" {
-  source = "skyfjall/label/null"
+  source  = "skyfjell/label/null"
+  version = "1.0.1"
 
   tenant      = "tf"
   environment = "test"
@@ -12,9 +17,8 @@ module "labels" {
 module "simple" {
   source = "../.."
 
-  name       = "simple"
-  use_prefix = true
-  labels     = module.labels
+  name   = "simple"
+  labels = module.labels
 }
 
 output "bucket" {
