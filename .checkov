@@ -6,7 +6,5 @@ directory:
   - .
 framework:
   - all
-output:
-  - sarif
 quiet: true
 skip-path: "./examples"
