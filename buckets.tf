@@ -1,5 +1,7 @@
 
 resource "aws_s3_bucket" "this" {
+  // checkov:skip=CKV_AWS_144: Not yet supported
+  // checkov:skip=CKV2_AWS_6: Moved to resource `aws_s3_bucket_public_access_block`
   bucket        = local.use_prefix ? null : local.bucket_name
   bucket_prefix = local.use_prefix ? local.bucket_name : null
   force_destroy = local.force_destroy
@@ -50,6 +52,10 @@ resource "aws_s3_bucket_versioning" "this" {
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
+  // checkov:skip=CKV_AWS_53: User defined input
+  // checkov:skip=CKV_AWS_54: User defined input
+  // checkov:skip=CKV_AWS_55: User defined input
+  // checkov:skip=CKV_AWS_56: User defined input
   bucket                  = aws_s3_bucket.this.id
   block_public_policy     = local.public_access_block["block_public_policy"]
   block_public_acls       = local.public_access_block["block_public_acls"]

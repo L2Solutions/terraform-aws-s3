@@ -48,7 +48,7 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@v12.1347.0
         with:
-          quiet: true
+          config_file: .checkov
 
       - uses: actions/setup-go@v3
         with:
