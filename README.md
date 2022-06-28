@@ -16,7 +16,9 @@
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_labels"></a> [labels](#module\_labels) | skyfjell/label/null//modules/extend | 1.0.1 |
 
 ## Resources
 
@@ -41,10 +43,11 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_acl"></a> [acl](#input\_acl) | Bucket ACL | `string` | `"private"` | no |
+| <a name="input_config_unique_id"></a> [config\_unique\_id](#input\_config\_unique\_id) | Configure Unique Identifier | <pre>object({<br>    enable        = optional(bool)<br>    length        = optional(number)<br>    enable_suffix = optional(bool)<br>  })</pre> | `{}` | no |
 | <a name="input_cors_rule"></a> [cors\_rule](#input\_cors\_rule) | value | <pre>map(object({<br>    allowed_headers = optional(list(string))<br>    allowed_methods = optional(list(string))<br>    allowed_origins = optional(list(string))<br>    expose_headers  = optional(list(string))<br>  }))</pre> | `{}` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Force destroy variable passed through to s3 resource | `bool` | `false` | no |
 | <a name="input_groups"></a> [groups](#input\_groups) | Group names to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
-| <a name="input_labels"></a> [labels](#input\_labels) | Instance of labels module | <pre>object(<br>    {<br>      id   = string<br>      tags = any<br>    }<br>  )</pre> | <pre>{<br>  "id": "",<br>  "tags": {}<br>}</pre> | no |
+| <a name="input_labels"></a> [labels](#input\_labels) | Instance of labels module | `any` | <pre>{<br>  "id": "",<br>  "tags": {}<br>}</pre> | no |
 | <a name="input_logging"></a> [logging](#input\_logging) | Pass null to disable logging or pass the logging bucket id | `string` | `null` | no |
 | <a name="input_logging_prefix"></a> [logging\_prefix](#input\_logging\_prefix) | Will default to /{name} | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the s3 bucket | `string` | n/a | yes |
@@ -54,7 +57,7 @@ No modules.
 | <a name="input_roles"></a> [roles](#input\_roles) | Roles to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
 | <a name="input_sse_algorithm"></a> [sse\_algorithm](#input\_sse\_algorithm) | The encryption algorithm | `string` | `"aws:kms"` | no |
 | <a name="input_suppress_iam"></a> [suppress\_iam](#input\_suppress\_iam) | Supresses the module creating iam resources if none are needed | `bool` | `false` | no |
-| <a name="input_use_prefix"></a> [use\_prefix](#input\_use\_prefix) | Use var.name as name prefix instead | `bool` | `true` | no |
+| <a name="input_use_prefix"></a> [use\_prefix](#input\_use\_prefix) | Use var.name as name prefix instead | `bool` | `false` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Use bucket versioning | `bool` | `true` | no |
 
 ## Outputs
