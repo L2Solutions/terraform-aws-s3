@@ -1,0 +1,10 @@
+branch: main
+download-external-modules: false
+evaluate-variables: true
+external-modules-download-path: .external_modules
+directory:
+  - .
+framework:
+  - all
+quiet: true
+skip-path: "./examples"
