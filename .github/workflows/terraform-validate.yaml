@@ -47,8 +47,6 @@ jobs:
       - name: Run Checkov action
         id: checkov
         uses: bridgecrewio/checkov-action@v12.1347.0
-        with:
-          config_file: .checkov
 
       - uses: actions/setup-go@v3
         with:
