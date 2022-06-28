@@ -25,7 +25,7 @@ jobs:
           git-push: "true"
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v2.0.0
         with:
           terraform_wrapper: false
 
@@ -37,15 +37,23 @@ jobs:
         run: |
           terraform init -backend=false
           terraform validate ./
+
       - name: Terraform Validate Examples/s3policy
         working-directory: examples/s3policy
         run: |
           terraform init -backend=false
           terraform validate ./
 
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@v12.1347.0
+        with:
+          quiet: true
+
       - uses: actions/setup-go@v3
         with:
           go-version: ">=1.17.0"
+
       - name: Terratest
         working-directory: test
         run: go test
