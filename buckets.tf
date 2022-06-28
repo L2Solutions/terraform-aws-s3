@@ -2,6 +2,10 @@
 resource "aws_s3_bucket" "this" {
   // checkov:skip=CKV_AWS_144: Not yet supported
   // checkov:skip=CKV2_AWS_6: Moved to resource `aws_s3_bucket_public_access_block`
+  // checkov:skip=CKV_AWS_21: User defined input
+  // checkov:skip=CKV_AWS_18: User defined input
+  // checkov:skip=CKV_AWS_145: User defined input
+  // checkov:skip=CKV_AWS_19: User defined input
   bucket        = local.use_prefix ? null : local.bucket_name
   bucket_prefix = local.use_prefix ? local.bucket_name : null
   force_destroy = local.force_destroy
