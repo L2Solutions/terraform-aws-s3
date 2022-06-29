@@ -1,15 +1,14 @@
 locals {
-  bucket               = var.name
+  name                 = var.name
   use_prefix           = var.use_prefix
   labels               = var.labels
   sse_algorithm        = var.sse_algorithm
   acl                  = var.acl
   versioning           = var.versioning
-  prefix               = var.logging_prefix != null ? var.logging_prefix : "${local.bucket}/"
+  prefix               = var.logging_prefix != null ? var.logging_prefix : "${local.name}/"
   cors_rule            = var.cors_rule
   roles                = var.roles
   groups               = var.groups
-  bucket_name          = (var.name_override || local.labels == null) ? local.bucket : "${local.labels.id}-${local.bucket}"
   suppress_iam         = var.suppress_iam
   public_access_block  = { for k, v in var.public_access_block : k => v == null ? false : v }
   force_destroy        = var.force_destroy
@@ -22,4 +21,10 @@ locals {
       bucket = var.logging
       prefix = local.prefix
   } }
+
+  config_unique_id = defaults(var.config_unique_id, {
+    enable        = true
+    length        = 8
+    enable_suffix = !local.use_prefix
+  })
 }
