@@ -28,3 +28,11 @@ output "s3_id" {
   value       = aws_s3_bucket.this.id
   description = "ID of created S3 bucket"
 }
+
+output "kms_arn" {
+  value = try(
+    aws_kms_key.this.0,
+    null
+  )
+  description = "Arn of the kms created"
+}

@@ -2,7 +2,7 @@ locals {
   bucket               = var.name
   use_prefix           = var.use_prefix
   labels               = var.labels
-  sse_algorithm        = var.sse_algorithm
+  sse_config           = var.server_side_encryption_configuration
   acl                  = var.acl
   versioning           = var.versioning
   prefix               = var.logging_prefix != null ? var.logging_prefix : "${local.bucket}/"
@@ -22,4 +22,8 @@ locals {
       bucket = var.logging
       prefix = local.prefix
   } }
+}
+
+locals {
+  use_kms = local.sse_config.type == "aws:kms"
 }

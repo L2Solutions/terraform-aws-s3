@@ -40,6 +40,10 @@ module "this" {
     mode = "RO"
   }]
 
+  server_side_encryption_configuration = {
+    type = "aws:kms"
+  }
+
   policy_conditions = {
     RO = {
       "key" = {
