@@ -52,6 +52,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this_aes" {
 resource "aws_kms_key" "this" {
   count                   = local.sse_config.type == "aws:kms" && local.sse_config.kms_master_key_id == null ? 1 : 0
   description             = "KMS key used for ${aws_s3_bucket.this.id} encryption"
+  enable_key_rotation     = true
   deletion_window_in_days = 10
 }
 
