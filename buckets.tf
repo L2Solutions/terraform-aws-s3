@@ -66,7 +66,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm     = local.sse_config.type
-      kms_master_key_id = data.aws_kms_key.arn
+      kms_master_key_id = data.aws_kms_key.this.arn
     }
   }
 }
