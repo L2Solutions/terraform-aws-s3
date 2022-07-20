@@ -41,7 +41,7 @@ module "this" {
   }]
 
   server_side_encryption_configuration = {
-    type = "aws:kms"
+    type = "AES256"
   }
 
   policy_conditions = {

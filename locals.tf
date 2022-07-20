@@ -23,7 +23,3 @@ locals {
       prefix = local.prefix
   } }
 }
-
-locals {
-  use_kms = local.sse_config.type == "aws:kms"
-}

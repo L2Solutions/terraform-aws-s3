@@ -15,6 +15,9 @@ module "simple" {
   name       = "simple"
   use_prefix = true
   labels     = module.labels
+  server_side_encryption_configuration = {
+    type = "AES256"
+  }
 }
 
 output "bucket" {
