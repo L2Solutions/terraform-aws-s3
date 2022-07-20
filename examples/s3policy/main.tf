@@ -40,6 +40,10 @@ module "this" {
     mode = "RO"
   }]
 
+  server_side_encryption_configuration = {
+    type = "AES256"
+  }
+
   policy_conditions = {
     RO = {
       "key" = {

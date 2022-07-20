@@ -29,11 +29,17 @@ variable "labels" {
   }
 }
 
+variable "server_side_encryption_configuration" {
+  description = "Pass through to server_side_encryption_configuration. If null is passed for kms_master_key_id, will autocreate"
+  type = object({
+    type              = string
+    kms_master_key_id = optional(string)
+  })
 
-variable "sse_algorithm" {
-  default     = "aws:kms"
-  description = "The encryption algorithm"
-  type        = string
+  default = {
+    kms_master_key_id = null
+    type              = "aws:kms"
+  }
 }
 
 variable "acl" {

@@ -26,15 +26,18 @@ No modules.
 | [aws_iam_policy.this_ro](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.this_rw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role_policy_attachment.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_kms_key.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
 | [aws_s3_bucket_cors_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_cors_configuration) | resource |
 | [aws_s3_bucket_logging.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
 | [aws_s3_bucket_public_access_block.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_s3_bucket_server_side_encryption_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
+| [aws_s3_bucket_server_side_encryption_configuration.this_aes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
+| [aws_s3_bucket_server_side_encryption_configuration.this_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_s3_bucket_versioning.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
 | [aws_iam_policy_document.this_ro](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this_rw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_kms_key.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 
 ## Inputs
 
@@ -52,7 +55,7 @@ No modules.
 | <a name="input_policy_conditions"></a> [policy\_conditions](#input\_policy\_conditions) | Conditions on RO and RW policy | <pre>object({<br>    RW = optional(map(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })))<br>    RO = optional(map(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })))<br>  })</pre> | `{}` | no |
 | <a name="input_public_access_block"></a> [public\_access\_block](#input\_public\_access\_block) | n/a | <pre>object({<br>    block_public_policy     = optional(bool)<br>    block_public_acls       = optional(bool)<br>    restrict_public_buckets = optional(bool)<br>    ignore_public_acls      = optional(bool)<br>  })</pre> | `{}` | no |
 | <a name="input_roles"></a> [roles](#input\_roles) | Roles to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
-| <a name="input_sse_algorithm"></a> [sse\_algorithm](#input\_sse\_algorithm) | The encryption algorithm | `string` | `"aws:kms"` | no |
+| <a name="input_server_side_encryption_configuration"></a> [server\_side\_encryption\_configuration](#input\_server\_side\_encryption\_configuration) | Pass through to server\_side\_encryption\_configuration. If null is passed for kms\_master\_key\_id, will autocreate | <pre>object({<br>    type              = string<br>    kms_master_key_id = optional(string)<br>  })</pre> | <pre>{<br>  "kms_master_key_id": null,<br>  "type": "aws:kms"<br>}</pre> | no |
 | <a name="input_suppress_iam"></a> [suppress\_iam](#input\_suppress\_iam) | Supresses the module creating iam resources if none are needed | `bool` | `false` | no |
 | <a name="input_use_prefix"></a> [use\_prefix](#input\_use\_prefix) | Use var.name as name prefix instead | `bool` | `true` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Use bucket versioning | `bool` | `true` | no |
@@ -61,6 +64,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_kms_arn"></a> [kms\_arn](#output\_kms\_arn) | Arn of the kms created |
 | <a name="output_ro_arn"></a> [ro\_arn](#output\_ro\_arn) | Read Only S3 policy ARN. Deprecated use rw\_policy output |
 | <a name="output_ro_policy"></a> [ro\_policy](#output\_ro\_policy) | Read Only S3 policy object |
 | <a name="output_rw_arn"></a> [rw\_arn](#output\_rw\_arn) | Read/Write S3 policy ARN. Deprecated use rw\_policy output |

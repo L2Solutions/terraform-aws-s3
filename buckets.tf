@@ -38,12 +38,37 @@ resource "aws_s3_bucket_acl" "this" {
   acl    = local.acl
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "this_aes" {
+  count  = local.sse_config.type == "aws:kms" ? 0 : 1
   bucket = aws_s3_bucket.this.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = local.sse_algorithm
+      sse_algorithm = local.sse_config.type
+    }
+  }
+}
+
+resource "aws_kms_key" "this" {
+  count                   = local.sse_config.type == "aws:kms" && local.sse_config.kms_master_key_id == null ? 1 : 0
+  description             = "KMS key used for ${aws_s3_bucket.this.id} encryption"
+  enable_key_rotation     = true
+  deletion_window_in_days = 10
+}
+
+data "aws_kms_key" "this" {
+  count  = local.sse_config.type == "aws:kms" ? 1 : 0
+  key_id = local.sse_config.kms_master_key_id == null ? aws_kms_key.this.0.arn : local.sse_config.kms_master_key_id
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
+  count  = local.sse_config.type == "aws:kms" ? 1 : 0
+  bucket = aws_s3_bucket.this.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = local.sse_config.type
+      kms_master_key_id = data.aws_kms_key.this.0.arn
     }
   }
 }
