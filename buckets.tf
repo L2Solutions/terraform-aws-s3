@@ -57,7 +57,8 @@ resource "aws_kms_key" "this" {
 }
 
 data "aws_kms_key" "this" {
-  key_id = local.sse_config.type == "aws:kms" && local.sse_config.kms_master_key_id == null ? aws_kms_key.this.0.arn : local.sse_config.kms_master_key_id
+  count  = local.sse_config.type == "aws:kms" ? 1 : 0
+  key_id = local.sse_config.kms_master_key_id == null ? aws_kms_key.this.0.arn : local.sse_config.kms_master_key_id
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
@@ -67,7 +68,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm     = local.sse_config.type
-      kms_master_key_id = data.aws_kms_key.this.arn
+      kms_master_key_id = data.aws_kms_key.this.0.arn
     }
   }
 }
