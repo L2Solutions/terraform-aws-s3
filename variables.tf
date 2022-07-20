@@ -145,6 +145,6 @@ variable "force_destroy" {
 
 variable "bucket_policy" {
   description = "The policy document directly on the bucket. Use `data.aws_iam_policy_document.<name>.json` here."
-  type        = optional(any)
+  type        = any
   default     = null
 }
