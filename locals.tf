@@ -15,7 +15,7 @@ locals {
   force_destroy        = var.force_destroy
   RW_policy_conditions = var.policy_conditions.RW == tomap(null) ? {} : var.policy_conditions.RW
   RO_policy_conditions = var.policy_conditions.RO == tomap(null) ? {} : var.policy_conditions.RO
-
+  bucket_policy        = var.bucket_policy
 
   logging = var.logging == null ? {} : {
     logging = {
