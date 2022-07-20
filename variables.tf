@@ -142,3 +142,9 @@ variable "force_destroy" {
   default     = false
   description = "Force destroy variable passed through to s3 resource"
 }
+
+variable "bucket_policy" {
+  description = "The policy document directly on the bucket. Use `data.aws_iam_policy_document.<name>.json` here."
+  type        = any
+  default     = null
+}

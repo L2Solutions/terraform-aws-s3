@@ -171,3 +171,10 @@ resource "aws_iam_role_policy_attachment" "this" {
   role       = local.roles[count.index].name
   policy_arn = local.roles[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
 }
+
+resource "aws_s3_bucket_policy" "this" {
+  count = local.bucket_policy == null ? 0 : 1
+
+  bucket = aws_s3_bucket.this.id
+  policy = local.bucket_policy
+}
