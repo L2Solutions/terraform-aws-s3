@@ -31,6 +31,7 @@ No modules.
 | [aws_s3_bucket_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
 | [aws_s3_bucket_cors_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_cors_configuration) | resource |
 | [aws_s3_bucket_logging.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
+| [aws_s3_bucket_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.this_aes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.this_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
@@ -44,6 +45,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_acl"></a> [acl](#input\_acl) | Bucket ACL | `string` | `"private"` | no |
+| <a name="input_bucket_policy"></a> [bucket\_policy](#input\_bucket\_policy) | The policy document directly on the bucket. Use `data.aws_iam_policy_document.<name>.json` here. | `optional(any)` | `null` | no |
 | <a name="input_cors_rule"></a> [cors\_rule](#input\_cors\_rule) | value | <pre>map(object({<br>    allowed_headers = optional(list(string))<br>    allowed_methods = optional(list(string))<br>    allowed_origins = optional(list(string))<br>    expose_headers  = optional(list(string))<br>  }))</pre> | `{}` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Force destroy variable passed through to s3 resource | `bool` | `false` | no |
 | <a name="input_groups"></a> [groups](#input\_groups) | Group names to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
