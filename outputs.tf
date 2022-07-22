@@ -31,7 +31,7 @@ output "s3_id" {
 
 output "kms_arn" {
   value = try(
-    aws_kms_key.this.0,
+    data.aws_kms_key.this.0.arn,
     null
   )
   description = "Arn of the kms created"
