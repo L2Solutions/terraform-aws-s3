@@ -61,6 +61,12 @@ data "aws_kms_key" "this" {
   key_id = local.sse_config.kms_master_key_id == null ? aws_kms_key.this.0.arn : local.sse_config.kms_master_key_id
 }
 
+resource "aws_kms_alias" "this" {
+  count         = local.sse_config.type == "aws:kms" && local.sse_config.alias != null ? 1 : 0
+  name          = local.sse_config.alias
+  target_key_id = data.aws_kms_key.this.0.id
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
   count  = local.sse_config.type == "aws:kms" ? 1 : 0
   bucket = aws_s3_bucket.this.id

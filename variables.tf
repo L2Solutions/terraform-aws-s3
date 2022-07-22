@@ -30,13 +30,19 @@ variable "labels" {
 }
 
 variable "server_side_encryption_configuration" {
-  description = "Pass through to server_side_encryption_configuration. If null is passed for kms_master_key_id, will autocreate"
+  description = <<EOT
+  Pass through to server_side_encryption_configuration. If null is passed for kms_master_key_id, will autocreate.
+  An alias can also be passed to be created on the key.
+  EOT
+
   type = object({
     type              = string
     kms_master_key_id = optional(string)
+    alias             = optional(string)
   })
 
   default = {
+    alias             = null
     kms_master_key_id = null
     type              = "aws:kms"
   }
