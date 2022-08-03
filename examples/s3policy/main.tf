@@ -31,7 +31,7 @@ resource "aws_iam_role" "this" {
 module "log" {
   source = "../.."
 
-  name       = "log"
+  name       = "simple"
   use_prefix = true
   labels     = module.labels
   server_side_encryption_configuration = {
