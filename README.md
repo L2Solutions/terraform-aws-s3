@@ -51,8 +51,7 @@ No modules.
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Force destroy variable passed through to s3 resource | `bool` | `false` | no |
 | <a name="input_groups"></a> [groups](#input\_groups) | Group names to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Instance of labels module | <pre>object(<br>    {<br>      id   = string<br>      tags = any<br>    }<br>  )</pre> | <pre>{<br>  "id": "",<br>  "tags": {}<br>}</pre> | no |
-| <a name="input_logging"></a> [logging](#input\_logging) | Pass null to disable logging or pass the logging bucket id | `string` | `null` | no |
-| <a name="input_logging_prefix"></a> [logging\_prefix](#input\_logging\_prefix) | Will default to /{name} | `string` | `null` | no |
+| <a name="input_logging"></a> [logging](#input\_logging) | Logging configuration. Pass in bucket and prefix to configure logging. No prefix will default in bucket name. Null object will ignore logging all together | <pre>object({<br>    target_bucket = string<br>    target_prefix = optional(string)<br>  })</pre> | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the s3 bucket | `string` | n/a | yes |
 | <a name="input_name_override"></a> [name\_override](#input\_name\_override) | Name override the opinionated name variable | `bool` | `false` | no |
 | <a name="input_policy_conditions"></a> [policy\_conditions](#input\_policy\_conditions) | Conditions on RO and RW policy | <pre>object({<br>    RW = optional(map(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })))<br>    RO = optional(map(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })))<br>  })</pre> | `{}` | no |
