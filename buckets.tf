@@ -29,8 +29,8 @@ resource "aws_s3_bucket_logging" "this" {
   for_each = local.logging
   bucket   = aws_s3_bucket.this.id
 
-  target_bucket = each.value["bucket"]
-  target_prefix = each.value["prefix"]
+  target_bucket = each.value["target_bucket"]
+  target_prefix = each.value["target_prefix"]
 }
 
 resource "aws_s3_bucket_acl" "this" {

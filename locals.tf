@@ -5,7 +5,6 @@ locals {
   sse_config           = var.server_side_encryption_configuration
   acl                  = var.acl
   versioning           = var.versioning
-  prefix               = var.logging_prefix != null ? var.logging_prefix : "${local.bucket}/"
   cors_rule            = var.cors_rule
   roles                = var.roles
   groups               = var.groups
@@ -19,7 +18,7 @@ locals {
 
   logging = var.logging == null ? {} : {
     logging = {
-      bucket = var.logging
-      prefix = local.prefix
+      target_bucket = var.logging.target_bucket
+      target_prefix = var.logging.target_prefix != null ? var.logging.target_prefix : "${local.bucket}/"
   } }
 }

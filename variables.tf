@@ -61,16 +61,16 @@ variable "versioning" {
 }
 
 variable "logging" {
-  description = "Pass null to disable logging or pass the logging bucket id"
-  type        = string
-  default     = null
+  description = <<EOT
+  Logging configuration. Pass in bucket and prefix to configure logging. No prefix will default in bucket name. Null object will ignore logging all together
+  EOT
+  type = object({
+    target_bucket = string
+    target_prefix = optional(string)
+  })
+  default = null
 }
 
-variable "logging_prefix" {
-  description = "Will default to /{name}"
-  type        = string
-  default     = null
-}
 
 variable "cors_rule" {
   description = "value"
