@@ -21,5 +21,5 @@ module "simple" {
 }
 
 output "bucket" {
-  value = module.simple.s3_id
+  value = module.simple.s3.id
 }
