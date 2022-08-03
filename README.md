@@ -71,6 +71,5 @@ No modules.
 | <a name="output_ro_policy"></a> [ro\_policy](#output\_ro\_policy) | Read Only S3 policy object |
 | <a name="output_rw_arn"></a> [rw\_arn](#output\_rw\_arn) | Read/Write S3 policy ARN. Deprecated use rw\_policy output |
 | <a name="output_rw_policy"></a> [rw\_policy](#output\_rw\_policy) | Read/Write S3 policy object |
-| <a name="output_s3_arn"></a> [s3\_arn](#output\_s3\_arn) | ARN of created S3 bucket |
-| <a name="output_s3_id"></a> [s3\_id](#output\_s3\_id) | ID of created S3 bucket |
+| <a name="output_s3"></a> [s3](#output\_s3) | The s3 output object containing select values of the bucket. |
 <!-- END_TF_DOCS -->
