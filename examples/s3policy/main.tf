@@ -56,7 +56,7 @@ module "this" {
   }
 
   logging = {
-    target_bucket = module.log.s3_id
+    target_bucket = module.log.s3.id
   }
 
   policy_conditions = {
@@ -84,7 +84,7 @@ module "this" {
 
 
 output "bucket" {
-  value = module.this.s3_id
+  value = module.this.s3.id
 }
 
 output "policy_json" {
