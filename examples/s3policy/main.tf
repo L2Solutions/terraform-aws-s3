@@ -28,6 +28,17 @@ resource "aws_iam_role" "this" {
 }
 
 
+module "log" {
+  source = "../.."
+
+  name       = "simple"
+  use_prefix = true
+  labels     = module.labels
+  server_side_encryption_configuration = {
+    type = "AES256"
+  }
+}
+
 module "this" {
   source = "../.."
 
@@ -42,6 +53,10 @@ module "this" {
 
   server_side_encryption_configuration = {
     type = "AES256"
+  }
+
+  logging = {
+    target_bucket = module.log.s3_id
   }
 
   policy_conditions = {
