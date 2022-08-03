@@ -1,8 +1,3 @@
-output "s3_arn" {
-  value       = aws_s3_bucket.this.arn
-  description = "ARN of created S3 bucket"
-}
-
 output "rw_arn" {
   value       = local.suppress_iam ? null : aws_iam_policy.this_rw[0].arn
   description = "Read/Write S3 policy ARN. Deprecated use rw_policy output"
@@ -24,10 +19,14 @@ output "ro_policy" {
   description = "Read Only S3 policy object"
 }
 
-output "s3_id" {
-  value       = aws_s3_bucket.this.id
-  description = "ID of created S3 bucket"
+output "s3" {
+  description = "The s3 output object containing select values of the bucket."
+  value = {
+    id  = aws_s3_bucket.this.id
+    arn = aws_s3_bucket.this.arn
+  }
 }
+
 
 output "kms_arn" {
   value = try(
