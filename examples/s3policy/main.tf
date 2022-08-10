@@ -31,12 +31,16 @@ resource "aws_iam_role" "this" {
 module "log" {
   source = "../.."
 
-  name       = "simple"
+  name       = "access-logs"
   use_prefix = true
   labels     = module.labels
   server_side_encryption_configuration = {
     type = "AES256"
   }
+
+  # config_logging = {
+  #   enable = false
+  # }
 }
 
 module "this" {
@@ -46,47 +50,55 @@ module "this" {
   use_prefix = true
   labels     = module.labels
 
-  roles = [{
-    name = aws_iam_role.this.name
-    mode = "RO"
-  }]
+  roles = {
+    s3policy-ro = {
+      name = aws_iam_role.this.name
+      mode = "ro"
+    }
+  }
 
   server_side_encryption_configuration = {
     type = "AES256"
   }
 
-  logging = {
-    target_bucket = module.log.s3.id
+  config_logging = {
+    access_logs = {
+      target_bucket = module.log.bucket.id
+    }
   }
 
-  policy_conditions = {
-    RO = {
-      "key" = {
-        test     = "StringLike"
-        values   = ["home/", "other/"]
-        variable = "s3:prefix"
-      }
-      "key2" = {
-        test     = "StringEquals"
-        values   = ["test"]
-        variable = "s3:prefix"
-      }
-    }
-    RW = {
-      "key" = {
-        test     = "StringLike"
-        values   = ["home/"]
-        variable = "s3:prefix"
-      }
+  config_iam = {
+    policy_conditions = {
+      ro = [
+        {
+          test     = "StringLike"
+          values   = ["home/", "other/"]
+          variable = "s3:prefix"
+        },
+        {
+          test     = "StringEquals"
+          values   = ["test"]
+          variable = "s3:prefix"
+        }
+      ],
+      rw = [
+        {
+          test     = "StringLike"
+          values   = ["home/"]
+          variable = "s3:prefix"
+        }
+      ]
     }
   }
+
+
 }
 
 
 output "bucket" {
-  value = module.this.s3.id
+  value = module.this.bucket.id
 }
 
 output "policy_json" {
-  value = module.this.ro_policy
+  value = module.this.policies.ro
 }

@@ -1,24 +1,42 @@
 locals {
-  bucket               = var.name
-  use_prefix           = var.use_prefix
-  labels               = var.labels
-  sse_config           = var.server_side_encryption_configuration
-  acl                  = var.acl
-  versioning           = var.versioning
-  cors_rule            = var.cors_rule
-  roles                = var.roles
-  groups               = var.groups
-  bucket_name          = (var.name_override || local.labels == null) ? local.bucket : "${local.labels.id}-${local.bucket}"
-  suppress_iam         = var.suppress_iam
-  public_access_block  = { for k, v in var.public_access_block : k => v == null ? false : v }
-  force_destroy        = var.force_destroy
-  RW_policy_conditions = var.policy_conditions.RW == tomap(null) ? {} : var.policy_conditions.RW
-  RO_policy_conditions = var.policy_conditions.RO == tomap(null) ? {} : var.policy_conditions.RO
-  bucket_policy        = var.bucket_policy
+  bucket_name = (var.name_override || local.labels == null) ? var.name : "${local.labels.id}-${var.name}"
+  labels      = var.labels
+  use_prefix  = var.use_prefix
 
-  logging = var.logging == null ? {} : {
-    logging = {
-      target_bucket = var.logging.target_bucket
-      target_prefix = var.logging.target_prefix != null ? var.logging.target_prefix : "${local.bucket}/"
-  } }
+  roles = defaults(var.roles, {
+    mode = "ro"
+  })
+
+  groups = defaults(var.groups, {
+    mode = "ro"
+  })
+
+  sse_config        = var.server_side_encryption_configuration
+  acl               = var.acl
+  enable_versioning = var.enable_versioning
+
+  public_access_block = defaults(var.public_access_block, {
+    block_public_policy     = true,
+    block_public_acls       = true,
+    restrict_public_buckets = true,
+    ignore_public_acls      = true,
+  })
+
+  config_cors = defaults(var.config_cors, {
+    rules = {}
+  })
+
+  config_iam = defaults(var.config_iam, {
+    enable            = true,
+    bucket_policy     = "",
+    policy_conditions = {}
+  })
+
+  config_logging = defaults(var.config_logging, {
+    buckets = {
+      target_prefix = "${local.bucket_name}/"
+    }
+  })
+
+  force_destroy = var.force_destroy
 }

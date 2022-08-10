@@ -14,20 +14,26 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_bucket_cors_configuration" "this" {
-  for_each = local.cors_rule
-  bucket   = aws_s3_bucket.this.id
+  count = length(local.config_cors.rules) > 0 ? 1 : 0
 
-  cors_rule {
-    allowed_headers = lookup(each.value, "allowed_headers", [])
-    allowed_methods = lookup(each.value, "allowed_methods", [])
-    allowed_origins = lookup(each.value, "allowed_origins", [])
-    expose_headers  = lookup(each.value, "expose_headers", [])
+  bucket = aws_s3_bucket.this.id
+
+  dynamic "cors_rule" {
+    for_each = local.config_cors.rules
+
+    content {
+      allowed_headers = lookup(each.value, "allowed_headers", [])
+      allowed_methods = lookup(each.value, "allowed_methods", [])
+      allowed_origins = lookup(each.value, "allowed_origins", [])
+      expose_headers  = lookup(each.value, "expose_headers", [])
+    }
   }
 }
 
 resource "aws_s3_bucket_logging" "this" {
-  for_each = local.logging
-  bucket   = aws_s3_bucket.this.id
+  for_each = local.config_logging.buckets
+
+  bucket = aws_s3_bucket.this.id
 
   target_bucket = each.value["target_bucket"]
   target_prefix = each.value["target_prefix"]
@@ -62,13 +68,15 @@ data "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
-  count         = local.sse_config.type == "aws:kms" && local.sse_config.alias != null ? 1 : 0
+  count = local.sse_config.type == "aws:kms" && local.sse_config.alias != null ? 1 : 0
+
   name          = local.sse_config.alias
   target_key_id = data.aws_kms_key.this.0.id
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
-  count  = local.sse_config.type == "aws:kms" ? 1 : 0
+  count = local.sse_config.type == "aws:kms" ? 1 : 0
+
   bucket = aws_s3_bucket.this.id
 
   rule {
@@ -81,8 +89,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this_kms" {
 
 resource "aws_s3_bucket_versioning" "this" {
   bucket = aws_s3_bucket.this.id
+
   versioning_configuration {
-    status = local.versioning ? "Enabled" : "Disabled"
+    status = local.enable_versioning ? "Enabled" : "Disabled"
   }
 }
 
@@ -99,20 +108,24 @@ resource "aws_s3_bucket_public_access_block" "this" {
 }
 
 data "aws_iam_policy_document" "this_ro" {
-  count = local.suppress_iam ? 0 : 1
+  count = local.config_iam.enable ? 1 : 0
+
   statement {
-    sid = "S3ListBucket"
+    sid    = "S3ListBucket"
+    effect = "Allow"
+
     actions = [
       "s3:GetObject*",
       "s3:List*"
     ]
-    effect = "Allow"
+
     resources = [
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*"
     ]
+
     dynamic "condition" {
-      for_each = local.RO_policy_conditions
+      for_each = try(local.config_iam.policy_conditions.ro, {})
 
       content {
         test     = condition.value.test
@@ -121,25 +134,26 @@ data "aws_iam_policy_document" "this_ro" {
       }
     }
   }
-
-
 }
 
 data "aws_iam_policy_document" "this_rw" {
-  count = local.suppress_iam ? 0 : 1
+  count = local.config_iam.enable ? 1 : 0
 
   statement {
-    sid = "S3ListBucket"
+    sid    = "S3ListBucket"
+    effect = "Allow"
+
     actions = [
       "s3:*"
     ]
-    effect = "Allow"
+
     resources = [
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*"
     ]
+
     dynamic "condition" {
-      for_each = local.RW_policy_conditions
+      for_each = try(local.config_iam.policy_conditions.rw, {})
 
       content {
         test     = condition.value.test
@@ -151,36 +165,36 @@ data "aws_iam_policy_document" "this_rw" {
 }
 
 resource "aws_iam_policy" "this_rw" {
-  count = local.suppress_iam ? 0 : 1
+  count = local.config_iam.enable ? 1 : 0
 
-  name_prefix = "${local.bucket}-rw"
-  policy      = data.aws_iam_policy_document.this_rw[0].json
+  name   = join("-", [aws_s3_bucket.this.id, "rw"])
+  policy = data.aws_iam_policy_document.this_rw[0].json
 }
 
 resource "aws_iam_policy" "this_ro" {
-  count = local.suppress_iam ? 0 : 1
+  count = local.config_iam.enable ? 1 : 0
 
-  name_prefix = "${local.bucket}-ro"
-  policy      = data.aws_iam_policy_document.this_ro[0].json
+  name   = join("-", [aws_s3_bucket.this.id, "ro"])
+  policy = data.aws_iam_policy_document.this_ro[0].json
 }
 
 resource "aws_iam_group_policy_attachment" "this" {
-  count = local.suppress_iam ? 0 : length(local.groups)
+  for_each = local.groups
 
-  group      = local.groups[count.index].name
-  policy_arn = local.groups[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
+  group      = each.value.name
+  policy_arn = each.value.mode == "rw" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  count = local.suppress_iam ? 0 : length(local.roles)
+  for_each = local.roles
 
-  role       = local.roles[count.index].name
-  policy_arn = local.roles[count.index].mode == "RW" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
+  role       = each.value.name
+  policy_arn = each.value.mode == "rw" ? aws_iam_policy.this_rw[0].arn : aws_iam_policy.this_ro[0].arn
 }
 
 resource "aws_s3_bucket_policy" "this" {
-  count = local.bucket_policy == null ? 0 : 1
+  count = length(local.config_iam.bucket_policy) > 0 ? 1 : 0
 
   bucket = aws_s3_bucket.this.id
-  policy = local.bucket_policy
+  policy = local.config_iam.bucket_policy
 }

@@ -18,8 +18,12 @@ module "simple" {
   server_side_encryption_configuration = {
     type = "AES256"
   }
+
+  config_logging = {
+    enable = false
+  }
 }
 
 output "bucket" {
-  value = module.simple.s3.id
+  value = module.simple.bucket.id
 }
