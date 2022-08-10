@@ -22,14 +22,8 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -check --recursive
 
-      - name: Terraform Validate examples/simple
-        working-directory: examples/simple
-        run: |
-          terraform init -backend=false
-          terraform validate ./
-
-      - name: Terraform Validate examples/s3policy
-        working-directory: examples/s3policy
+      - name: Terraform Validate examples/basic
+        working-directory: examples/basic
         run: |
           terraform init -backend=false
           terraform validate ./

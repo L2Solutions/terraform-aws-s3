@@ -9,7 +9,7 @@ module "labels" {
 }
 
 resource "aws_iam_role" "this" {
-  name_prefix = "s3policy"
+  name_prefix = join("-", [module.labels.id])
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -28,7 +28,7 @@ resource "aws_iam_role" "this" {
 }
 
 
-module "log" {
+module "logs" {
   source = "../.."
 
   name       = "access-logs"
@@ -38,15 +38,15 @@ module "log" {
     type = "AES256"
   }
 
-  # config_logging = {
-  #   enable = false
-  # }
+  config_logging = {
+    enable = false
+  }
 }
 
 module "this" {
   source = "../.."
 
-  name       = "s3policy"
+  name       = "basic"
   use_prefix = true
   labels     = module.labels
 
@@ -63,7 +63,7 @@ module "this" {
 
   config_logging = {
     access_logs = {
-      target_bucket = module.log.bucket.id
+      target_bucket = module.logs.bucket.id
     }
   }
 
