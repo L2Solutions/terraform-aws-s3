@@ -6,10 +6,11 @@ module "labels" {
   project     = "mods"
   name        = "aws"
   app         = "s3"
+  component   = "basic"
 }
 
 resource "aws_iam_role" "this" {
-  name_prefix = join("-", [module.labels.id])
+  name_prefix = module.labels.id
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
