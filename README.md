@@ -46,30 +46,25 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_acl"></a> [acl](#input\_acl) | Bucket ACL | `string` | `"private"` | no |
-| <a name="input_bucket_policy"></a> [bucket\_policy](#input\_bucket\_policy) | The policy document directly on the bucket. Use `data.aws_iam_policy_document.<name>.json` here. | `any` | `null` | no |
-| <a name="input_cors_rule"></a> [cors\_rule](#input\_cors\_rule) | value | <pre>map(object({<br>    allowed_headers = optional(list(string))<br>    allowed_methods = optional(list(string))<br>    allowed_origins = optional(list(string))<br>    expose_headers  = optional(list(string))<br>  }))</pre> | `{}` | no |
-| <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Force destroy variable passed through to s3 resource | `bool` | `false` | no |
-| <a name="input_groups"></a> [groups](#input\_groups) | Group names to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
+| <a name="input_config_cors"></a> [config\_cors](#input\_config\_cors) | CORS Configuration | <pre>object({<br>    rules = optional(list(object({<br>      allowed_headers = optional(list(string))<br>      allowed_methods = optional(list(string))<br>      allowed_origins = optional(list(string))<br>      expose_headers  = optional(list(string))<br>    })))<br>  })</pre> | `{}` | no |
+| <a name="input_config_iam"></a> [config\_iam](#input\_config\_iam) | Bucket IAM Configuration | <pre>object({<br>    enable        = optional(bool),<br>    bucket_policy = optional(string)<br>    policy_conditions = optional(map(list(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    }))))<br>  })</pre> | <pre>{<br>  "enable": true<br>}</pre> | no |
+| <a name="input_config_logging"></a> [config\_logging](#input\_config\_logging) | Logging Configuration - List of objects with target bucket and key prefix(defaults to bucket resource ID) | <pre>object({<br>    enabled = optional(bool),<br>    buckets = optional(map(object({<br>      target_bucket = string<br>      target_prefix = optional(string)<br>    })))<br>  })</pre> | `{}` | no |
+| <a name="input_enable_versioning"></a> [enable\_versioning](#input\_enable\_versioning) | Use bucket versioning | `bool` | `true` | no |
+| <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Force Destroy S3 Bucket | `bool` | `false` | no |
+| <a name="input_groups"></a> [groups](#input\_groups) | Group names to attach | <pre>map(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `{}` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Instance of labels module | <pre>object(<br>    {<br>      id   = string<br>      tags = any<br>    }<br>  )</pre> | <pre>{<br>  "id": "",<br>  "tags": {}<br>}</pre> | no |
-| <a name="input_logging"></a> [logging](#input\_logging) | Logging configuration. Pass in bucket and prefix to configure logging. No prefix will default in bucket name. Null object will ignore logging all together | <pre>object({<br>    target_bucket = string<br>    target_prefix = optional(string)<br>  })</pre> | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the s3 bucket | `string` | n/a | yes |
 | <a name="input_name_override"></a> [name\_override](#input\_name\_override) | Name override the opinionated name variable | `bool` | `false` | no |
-| <a name="input_policy_conditions"></a> [policy\_conditions](#input\_policy\_conditions) | Conditions on RO and RW policy | <pre>object({<br>    RW = optional(map(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })))<br>    RO = optional(map(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })))<br>  })</pre> | `{}` | no |
-| <a name="input_public_access_block"></a> [public\_access\_block](#input\_public\_access\_block) | n/a | <pre>object({<br>    block_public_policy     = optional(bool)<br>    block_public_acls       = optional(bool)<br>    restrict_public_buckets = optional(bool)<br>    ignore_public_acls      = optional(bool)<br>  })</pre> | `{}` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Roles to attach | <pre>list(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `[]` | no |
+| <a name="input_public_access_block"></a> [public\_access\_block](#input\_public\_access\_block) | Public Access Block Configuration | <pre>object({<br>    block_public_policy     = optional(bool)<br>    block_public_acls       = optional(bool)<br>    restrict_public_buckets = optional(bool)<br>    ignore_public_acls      = optional(bool)<br>  })</pre> | `{}` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Roles to attach | <pre>map(object({<br>    name = string<br>    mode = string<br>  }))</pre> | `{}` | no |
 | <a name="input_server_side_encryption_configuration"></a> [server\_side\_encryption\_configuration](#input\_server\_side\_encryption\_configuration) | Pass through to server\_side\_encryption\_configuration. If null is passed for kms\_master\_key\_id, will autocreate.<br>  An alias can also be passed to be created on the key. | <pre>object({<br>    type              = string<br>    kms_master_key_id = optional(string)<br>    alias             = optional(string)<br>  })</pre> | <pre>{<br>  "alias": null,<br>  "kms_master_key_id": null,<br>  "type": "aws:kms"<br>}</pre> | no |
-| <a name="input_suppress_iam"></a> [suppress\_iam](#input\_suppress\_iam) | Supresses the module creating iam resources if none are needed | `bool` | `false` | no |
 | <a name="input_use_prefix"></a> [use\_prefix](#input\_use\_prefix) | Use var.name as name prefix instead | `bool` | `true` | no |
-| <a name="input_versioning"></a> [versioning](#input\_versioning) | Use bucket versioning | `bool` | `true` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_kms_arn"></a> [kms\_arn](#output\_kms\_arn) | Arn of the kms created |
-| <a name="output_ro_arn"></a> [ro\_arn](#output\_ro\_arn) | Read Only S3 policy ARN. Deprecated use rw\_policy output |
-| <a name="output_ro_policy"></a> [ro\_policy](#output\_ro\_policy) | Read Only S3 policy object |
-| <a name="output_rw_arn"></a> [rw\_arn](#output\_rw\_arn) | Read/Write S3 policy ARN. Deprecated use rw\_policy output |
-| <a name="output_rw_policy"></a> [rw\_policy](#output\_rw\_policy) | Read/Write S3 policy object |
-| <a name="output_s3"></a> [s3](#output\_s3) | The s3 output object containing select values of the bucket. |
+| <a name="output_bucket"></a> [bucket](#output\_bucket) | The s3 output object containing select values of the bucket. |
+| <a name="output_kms_arn"></a> [kms\_arn](#output\_kms\_arn) | ARN of the kms key created |
+| <a name="output_policies"></a> [policies](#output\_policies) | Policies |
 <!-- END_TF_DOCS -->

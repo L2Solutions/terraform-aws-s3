@@ -12,39 +12,23 @@ jobs:
       AWS_DEFAULT_REGION: "us-east-2"
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: terraform-docs-gh-actions
-        uses: terraform-docs/gh-actions@v1.0.0
-        with:
-          working-dir: .
-          output-file: README.md
-          output-method: inject
-          git-push: "true"
+        uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0
         with:
           terraform_wrapper: false
 
-      - name: Terraform format
+      - name: Terraform Format
         run: terraform fmt -check --recursive
 
-      - name: Terraform Validate Examples/simple
-        working-directory: examples/simple
+      - name: Terraform Validate examples/basic
+        working-directory: examples/basic
         run: |
           terraform init -backend=false
           terraform validate ./
 
-      - name: Terraform Validate Examples/s3policy
-        working-directory: examples/s3policy
-        run: |
-          terraform init -backend=false
-          terraform validate ./
-
-      - name: Run Checkov action
+      - name: Run Checkov Action
         id: checkov
         uses: bridgecrewio/checkov-action@v12.1347.0
 
@@ -55,3 +39,16 @@ jobs:
       - name: Terratest
         working-directory: test
         run: go test
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: terraform-docs-gh-actions
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"

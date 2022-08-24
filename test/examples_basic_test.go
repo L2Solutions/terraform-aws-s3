@@ -32,7 +32,7 @@ func TestExampleS3Policy(t *testing.T) {
 	t.Parallel()
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: "../examples/s3policy",
+		TerraformDir: "../examples/basic",
 		NoColor:      true,
 	})
 
@@ -42,7 +42,7 @@ func TestExampleS3Policy(t *testing.T) {
 	bucket := terraform.Output(t, terraformOptions, "bucket")
 	policy := terraform.OutputMap(t, terraformOptions, "policy_json")
 
-	assert.Equal(t, true, strings.Contains(bucket, "tf-test-mods-aws-s3-s3policy"))
+	assert.Equal(t, true, strings.Contains(bucket, "tf-test-mods-aws-s3-basic"))
 
 	str, ok := policy["policy"]
 	assert.Equal(t, true, ok)
