@@ -118,18 +118,18 @@ variable "config_logging" {
   EOT
 
   type = object({
-    enabled = optional(bool),
+    enable = optional(bool),
     buckets = optional(map(object({
       target_bucket = string
       target_prefix = optional(string)
-    })))
+    })), {})
   })
 
   default = {}
 
   validation {
-    condition     = var.config_logging.enabled == false || length(var.config_logging.*) > 0
-    error_message = "`config_logging` requires at least one bucket or `config_logging.enabled` is set to false."
+    condition     = var.config_logging.enable == false || length(var.config_logging.buckets) > 0
+    error_message = "`config_logging` requires at least one bucket or `config_logging.enable` is set to false."
   }
 }
 

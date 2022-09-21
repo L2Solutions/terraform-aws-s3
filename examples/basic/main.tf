@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-2"
+}
+
 module "labels" {
   source = "skyfjall/label/null"
 
@@ -63,8 +67,10 @@ module "this" {
   }
 
   config_logging = {
-    access_logs = {
-      target_bucket = module.logs.bucket.id
+    buckets = {
+      access_logs = {
+        target_bucket = module.logs.bucket.id
+      }
     }
   }
 
@@ -94,7 +100,6 @@ module "this" {
 
 
 }
-
 
 output "bucket" {
   value = module.this.bucket.id
