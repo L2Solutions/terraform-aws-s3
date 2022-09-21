@@ -36,7 +36,7 @@ resource "aws_s3_bucket_logging" "this" {
   bucket = aws_s3_bucket.this.id
 
   target_bucket = each.value["target_bucket"]
-  target_prefix = each.value["target_prefix"]
+  target_prefix = coalesce(try(each.value.target_prefix, null), "${aws_s3_bucket.this.id}/")
 }
 
 resource "aws_s3_bucket_acl" "this" {
