@@ -36,7 +36,7 @@ variable "groups" {
 
   type = map(object({
     name = string
-    mode = string
+    mode = optional(string, "ro")
   }))
 
   validation {
@@ -52,7 +52,7 @@ variable "roles" {
 
   type = map(object({
     name = string
-    mode = string
+    mode = optional(string, "ro")
   }))
 
   validation {
@@ -98,13 +98,13 @@ variable "config_iam" {
   description = "Bucket IAM Configuration"
 
   type = object({
-    enable        = optional(bool),
-    bucket_policy = optional(string)
+    enable        = optional(bool, true),
+    bucket_policy = optional(string, "")
     policy_conditions = optional(map(list(object({
       test     = string
       variable = string
       values   = list(string)
-    }))))
+    }))), {})
   })
 
   default = {
@@ -141,7 +141,7 @@ variable "config_cors" {
       allowed_methods = optional(list(string))
       allowed_origins = optional(list(string))
       expose_headers  = optional(list(string))
-    })))
+    })), [])
   })
 
   default = {}
@@ -151,10 +151,10 @@ variable "public_access_block" {
   description = "Public Access Block Configuration"
 
   type = object({
-    block_public_policy     = optional(bool)
-    block_public_acls       = optional(bool)
-    restrict_public_buckets = optional(bool)
-    ignore_public_acls      = optional(bool)
+    block_public_policy     = optional(bool, true)
+    block_public_acls       = optional(bool, true)
+    restrict_public_buckets = optional(bool, true)
+    ignore_public_acls      = optional(bool, true)
   })
 
   default = {}

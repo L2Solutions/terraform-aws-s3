@@ -36,7 +36,7 @@ resource "aws_s3_bucket_logging" "this" {
   bucket = aws_s3_bucket.this.id
 
   target_bucket = each.value["target_bucket"]
-  target_prefix = each.value["target_prefix"]
+  target_prefix = lookup(each.value, "target_prefix", "${local.bucket_name}/")
 }
 
 resource "aws_s3_bucket_acl" "this" {

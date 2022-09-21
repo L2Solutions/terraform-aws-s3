@@ -6,7 +6,5 @@ terraform {
     }
   }
 
-  required_version = ">= 1.0.5"
-
-  experiments = [module_variable_optional_attrs]
+  required_version = ">= 1.3.0"
 }
