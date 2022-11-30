@@ -23,3 +23,11 @@ output "kms_arn" {
     null
   )
 }
+
+output "policy_documents" {
+  description = "Policy documents"
+  value = {
+    rw = one(data.aws_iam_policy_document.this_rw),
+    ro = one(data.aws_iam_policy_document.this_ro),
+  }
+}

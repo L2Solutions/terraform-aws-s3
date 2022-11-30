@@ -111,7 +111,7 @@ data "aws_iam_policy_document" "this_ro" {
   count = local.config_iam.enable ? 1 : 0
 
   statement {
-    sid    = "S3ListBucket"
+    sid    = "${local.sid_name}S3RO"
     effect = "Allow"
 
     actions = [
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "this_rw" {
   count = local.config_iam.enable ? 1 : 0
 
   statement {
-    sid    = "S3ListBucket"
+    sid    = "${local.sid_name}S3RW"
     effect = "Allow"
 
     actions = [

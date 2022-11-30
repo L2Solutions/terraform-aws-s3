@@ -19,3 +19,7 @@ locals {
 
   force_destroy = var.force_destroy
 }
+
+locals {
+  sid_name = replace(local.bucket_name, "-", "")
+}
