@@ -67,4 +67,5 @@ No modules.
 | <a name="output_bucket"></a> [bucket](#output\_bucket) | The s3 output object containing select values of the bucket. |
 | <a name="output_kms_arn"></a> [kms\_arn](#output\_kms\_arn) | ARN of the kms key created |
 | <a name="output_policies"></a> [policies](#output\_policies) | Policies |
+| <a name="output_policy_documents"></a> [policy\_documents](#output\_policy\_documents) | Policy documents |
 <!-- END_TF_DOCS -->
