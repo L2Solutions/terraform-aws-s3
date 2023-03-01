@@ -107,6 +107,19 @@ resource "aws_s3_bucket_public_access_block" "this" {
   ignore_public_acls      = local.public_access_block["ignore_public_acls"]
 }
 
+locals {
+  kms_actions = local.sse_config.type == "aws:kms" ? [
+    "kms:Encrypt",
+    "kms:Decrypt",
+    "kms:ReEncrypt*",
+    "kms:GenerateDataKey*",
+    "kms:DescribeKey",
+  ] : []
+  kms_resources = local.sse_config.type == "aws:kms" ? [
+    data.aws_kms_key.this.0.arn
+  ] : []
+}
+
 data "aws_iam_policy_document" "this_ro" {
   count = local.config_iam.enable ? 1 : 0
 
@@ -114,15 +127,16 @@ data "aws_iam_policy_document" "this_ro" {
     sid    = "${local.sid_name}S3RO"
     effect = "Allow"
 
-    actions = [
+    actions = concat([
       "s3:GetObject*",
       "s3:List*"
-    ]
+    ], local.kms_actions)
 
-    resources = [
+    resources = concat([
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*"
-    ]
+      ], local.kms_resources
+    )
 
     dynamic "condition" {
       for_each = try(local.config_iam.policy_conditions.ro, {})
@@ -143,14 +157,14 @@ data "aws_iam_policy_document" "this_rw" {
     sid    = "${local.sid_name}S3RW"
     effect = "Allow"
 
-    actions = [
+    actions = concat([
       "s3:*"
-    ]
+    ], local.kms_actions)
 
-    resources = [
+    resources = concat([
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*"
-    ]
+    ], local.kms_resources)
 
     dynamic "condition" {
       for_each = try(local.config_iam.policy_conditions.rw, {})
