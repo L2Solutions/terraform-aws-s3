@@ -83,9 +83,9 @@ variable "server_side_encryption_configuration" {
 }
 
 variable "acl" {
-  description = "Bucket ACL"
+  description = "Canned ACL grant"
   type        = string
-  default     = "private"
+  default     = null
 }
 
 variable "enable_versioning" {

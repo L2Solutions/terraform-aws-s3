@@ -97,8 +97,6 @@ module "this" {
       ]
     }
   }
-
-
 }
 
 output "bucket" {
