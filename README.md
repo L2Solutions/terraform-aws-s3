@@ -45,7 +45,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_acl"></a> [acl](#input\_acl) | Bucket ACL | `string` | `"private"` | no |
+| <a name="input_acl"></a> [acl](#input\_acl) | Canned ACL grant | `string` | `null` | no |
 | <a name="input_config_cors"></a> [config\_cors](#input\_config\_cors) | CORS Configuration | <pre>object({<br>    rules = optional(list(object({<br>      allowed_headers = optional(list(string))<br>      allowed_methods = optional(list(string))<br>      allowed_origins = optional(list(string))<br>      expose_headers  = optional(list(string))<br>    })), [])<br>  })</pre> | `{}` | no |
 | <a name="input_config_iam"></a> [config\_iam](#input\_config\_iam) | Bucket IAM Configuration | <pre>object({<br>    enable        = optional(bool, true),<br>    bucket_policy = optional(string, "")<br>    policy_conditions = optional(map(list(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    }))), {})<br>  })</pre> | <pre>{<br>  "enable": true<br>}</pre> | no |
 | <a name="input_config_logging"></a> [config\_logging](#input\_config\_logging) | Logging Configuration - List of objects with target bucket and key prefix(defaults to bucket resource ID) | <pre>object({<br>    enable = optional(bool),<br>    buckets = optional(map(object({<br>      target_bucket = string<br>      target_prefix = optional(string)<br>    })), {})<br>  })</pre> | `{}` | no |

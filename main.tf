@@ -40,6 +40,7 @@ resource "aws_s3_bucket_logging" "this" {
 }
 
 resource "aws_s3_bucket_acl" "this" {
+  count  = local.acl != null ? 1 : 0
   bucket = aws_s3_bucket.this.id
   acl    = local.acl
 }
